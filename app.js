@@ -86,11 +86,48 @@ app.route("/articles/:articleTitle")
         res.send("No article match.");
       }
   });
-});
+})
 
-// .post()
-//
-// .delete();
+.put(function(req, res){
+  Article.update(
+    {title: req.params.articleTitle},
+    {title: req.body.title, content: req.body.content},
+    {overwrite: true},
+    function(err){
+      if(!err){
+        res.send("Updated article.");
+      } else {
+        res.send("Not Updated");
+      }
+    });
+})
+
+.patch(function(req, res){
+  Article.update(
+    {title: req.params.articleTitle},
+    {$set: req.body},
+    function(err){
+      if(!err){
+        res.send("Updated article!");
+      } else {
+        res.send(err)
+      }
+    }
+  );
+})
+
+.delete(function(req, res){
+  Article.deleteOne(
+    {title: req.params.articleTitle},
+    function(err, foundArticle){
+      if(!err){
+        res.send("Deleted!");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
 
 
 // Server Setup
